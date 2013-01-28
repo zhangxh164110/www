@@ -24,15 +24,17 @@ import org.apache.struts2.ServletActionContext;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
+import cn.www.iservice.CommonManager;
 import cn.www.jdo.User;
-import cn.www.util.CommUtils;
-import cn.www.util.CookieUtil;
+import cn.www.utils.CommUtils;
+import cn.www.utils.CookieUtil;
 
 import com.opensymphony.xwork2.ActionSupport;
 
 @SuppressWarnings("unused")
 public class BaseAction extends ActionSupport{
 
+	private CommonManager commonManager;
 	/**
 	 * 打印到前台
 	 * @param obj
@@ -60,6 +62,9 @@ public class BaseAction extends ActionSupport{
 		}
 	}
 
+	public void setCommonManager(CommonManager commonManager) {
+		this.commonManager = commonManager;
+	}
 	/**
 	 * 获取Request
 	 * @return
@@ -82,7 +87,7 @@ public class BaseAction extends ActionSupport{
 	public User getLoginUser(){
 		String id = CookieUtil.getCookieValue(ServletActionContext.getRequest(), "c_userid");
 		if(CommUtils.isCorrectNumber(id)){
-			User user = getCommonManager().findEntityByPK(User.class, Long.parseLong(CookieUtil.getCookieValue(ServletActionContext.getRequest(), "c_userid")));
+			User user = commonManager.findEntityByPK(User.class, Long.parseLong(CookieUtil.getCookieValue(ServletActionContext.getRequest(), "c_userid")));
 			return user;
 		}else{
 			return null;
