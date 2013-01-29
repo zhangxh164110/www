@@ -1,0 +1,147 @@
+body {
+	margin-left: 0px;
+	margin-top: 0px;
+	margin-right: 0px;
+	margin-bottom: 0px;
+	background-color: #EEF2FB;
+	font-size: 12px;
+}
+
+.clear {
+	clear : both;
+}
+
+.td-cetenr {
+	text-align: center;
+}
+
+.txt-aling-left {
+	text-align: left;
+}
+
+.margin-up-down {
+ margin-top: 5px;
+ margin-bottom: 5px;
+}
+
+.margin-up-4 {
+  margin-top: 4px;
+}
+
+.pointer{
+	cursor: pointer;
+}
+
+.text-center {
+	text-align: center;
+}
+
+.main-td {
+	padding: 10px 10px 10px 10px;
+	BACKGROUND-COLOR: white;
+}
+
+.gridViewBtn {
+	border-left:solid #BAD6EC 1px;
+	border-right:solid #bad6ec 1px;
+	border-top:solid #bad6ec 1px;
+	padding: 0 0 0 5px;
+	font-size: 14px;
+}
+
+.gridViewBtn a {
+    color: #3366FF;
+    text-decoration: none;
+}
+
+.gridViewBtn a:hover {
+    color: #FF6600;
+    text-decoration: underline;
+}
+
+.gridView {
+	font-size:12px;
+	margin:0;
+	BORDER-RIGHT: #bad6ec 1px;
+	BORDER-TOP: #bad6ec 1px;
+	BORDER-LEFT: #bad6ec 1px;
+	COLOR: #566984;
+	BORDER-BOTTOM: #bad6ec 1px;
+	FONT-FAMILY: Courier New;
+	WIDTH: 100%; 
+	BORDER-COLLAPSE: collapse
+}
+
+.gridView th{
+	BORDER-RIGHT: #bad6ec 1px solid;
+	BORDER-TOP: #bad6ec 1px solid;
+	BACKGROUND-IMAGE: url(../images/bg_th.gif);
+	BORDER-LEFT: #bad6ec 1px solid;
+	LINE-HEIGHT: 27px;
+	BORDER-BOTTOM: #bad6ec 1px solid;
+	TEXT-ALIGN: center
+}
+
+.gridView td {
+	BORDER-RIGHT: #bad6ec 1px solid;
+	BORDER-TOP: #bad6ec 1px solid;
+	BORDER-LEFT: #bad6ec 1px solid;
+	LINE-HEIGHT: 32px;
+	BORDER-BOTTOM: #bad6ec 1px solid;
+	color: black;
+	padding-left: 5px;
+}
+
+.gridView td a {
+    color: #3366FF;
+    text-decoration: none;
+}
+
+.gridView td a:hover {
+    color: #FF6600;
+    text-decoration: underline;
+}
+
+.pageHeader {
+	background :url(../images/pageHeader_bg.png);
+	border-color: #B8D0D6;
+	border-style: solid;
+    border-width: 0 0 1px;
+    display: block;
+    margin-bottom: 1px;
+    overflow: auto;
+    padding: 5px;
+    position: relative;
+    border: 1px solid #B8D0D6;
+}
+
+.searchBar label {
+    color: #183152;
+}
+
+.searchBar .searchContent td {
+    height: 25px;
+    padding-right: 20px;
+    white-space: nowrap;
+}
+
+.textInput {
+    border-style: solid;
+    border-width: 1px;
+    font-size: 12px;
+    line-height: 15px;
+    margin: 0;
+    padding: 2px;
+    border-color: #A9D7E3;
+}
+
+.form-tab {
+	margin: 0;
+}
+
+.form-tab td{
+	text-align: left;
+	padding-top: 4px;
+	padding-bottom: 4px;
+	border-bottom: 1px dashed #C5D5E3;
+}

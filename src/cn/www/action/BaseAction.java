@@ -104,13 +104,14 @@ public class BaseAction extends ActionSupport{
 	 */
 	public void addUserToCookie(User user, Integer times){
 		HttpServletRequest request = ServletActionContext.getRequest();
-		String strTime = CookieUtil.getCookieValue(request, "cts_times");
+		String strTime = CookieUtil.getCookieValue(request, "www_times");
 		if(CommUtils.isCorrectNumber(strTime) && times == null){
 			times = Integer.valueOf(strTime);
 		}
-		CookieUtil.addCookie(ServletActionContext.getResponse(), "cts_username", user.getUserName(), "/", times);
-		CookieUtil.addCookie(ServletActionContext.getResponse(), "cts_userid", String.valueOf(user.getId()), "/", times);
-		CookieUtil.addCookie(ServletActionContext.getResponse(), "cts_times", String.valueOf(times), "/", times);
+		CookieUtil.addCookie(ServletActionContext.getResponse(), "www_username", user.getUserName(), "/", times);
+		CookieUtil.addCookie(ServletActionContext.getResponse(), "www_role", String.valueOf(user.getRole()), "/", times);
+		CookieUtil.addCookie(ServletActionContext.getResponse(), "www_userid", String.valueOf(user.getId()), "/", times);
+		CookieUtil.addCookie(ServletActionContext.getResponse(), "www_times", String.valueOf(times), "/", times);
 	}
 	
 	
@@ -127,13 +128,9 @@ public class BaseAction extends ActionSupport{
 		if(cookies != null){
 			for(int i = 0; i < cookies.length; i++){
 				String name = cookies[i].getName();
-				if(CommUtils.isValidStr(name) && (name.startsWith("cts_locale"))){
-					continue;
-				}else if(CommUtils.isValidStr(name) && name.startsWith("cts_")){
-					cookies[i].setMaxAge(0);
-					cookies[i].setPath("/");
-					response.addCookie(cookies[i]);
-				}
+				cookies[i].setMaxAge(0);
+				cookies[i].setPath("/");
+				response.addCookie(cookies[i]);
 			}
 		}
 	}

@@ -1,8 +1,9 @@
 <%@page pageEncoding="UTF-8" contentType="text/html; charset=UTF-8" %>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html;" />
-<title>企业邮件处理系统_用户登录</title>
+<title>用户登录</title>
 <style type="text/css">
 <!--
 body {
@@ -14,6 +15,7 @@ body {
 }
 -->
 </style>
+<script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery.js"></script>
 <script type="text/JavaScript">
 <!--
 function MM_preloadImages() { //v3.0
@@ -38,11 +40,100 @@ function MM_swapImage() { //v3.0
   var i,j=0,x,a=MM_swapImage.arguments; document.MM_sr=new Array; for(i=0;i<(a.length-2);i+=3)
    if ((x=MM_findObj(a[i]))!=null){document.MM_sr[j++]=x; if(!x.oSrc) x.oSrc=x.src; x.src=a[i+2];}
 }
+
 //-->
+</script>
+<script language="JavaScript">
+function correctPNG()
+{
+    var arVersion = navigator.appVersion.split("MSIE")
+    var version = parseFloat(arVersion[1])
+    if ((version >= 5.5) && (document.body.filters)) 
+    {
+       for(var j=0; j<document.images.length; j++)
+       {
+          var img = document.images[j]
+          var imgName = img.src.toUpperCase()
+          if (imgName.substring(imgName.length-3, imgName.length) == "PNG")
+          {
+             var imgID = (img.id) ? "id='" + img.id + "' " : ""
+             var imgClass = (img.className) ? "class='" + img.className + "' " : ""
+             var imgTitle = (img.title) ? "title='" + img.title + "' " : "title='" + img.alt + "' "
+             var imgStyle = "display:inline-block;" + img.style.cssText 
+             if (img.align == "left") imgStyle = "float:left;" + imgStyle
+             if (img.align == "right") imgStyle = "float:right;" + imgStyle
+             if (img.parentElement.href) imgStyle = "cursor:hand;" + imgStyle
+             var strNewHTML = "<span " + imgID + imgClass + imgTitle
+             + " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
+             + "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
+             + "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>" 
+             img.outerHTML = strNewHTML
+             j = j-1
+          }
+       }
+    }    
+}
+window.attachEvent("onload", correctPNG);
+
+function checkCookie(){
+	if(!(document.cookie || navigator.cookieEnabled)){
+		return false;
+	}
+	return true;
+}
+
+function handleEnter(field, event) {
+	if (event.keyCode == 13) { //回车
+		if (field.name == "username") {
+			if ($.trim($('#username').val()) != '') {
+				$('#password').focus();
+			}
+			return false;
+		}
+		if (field.name == "password") {
+			if ($.trim($('#password').val()) != '') {
+				login();
+			}
+		}
+		return true;
+	}
+}
+	
+function login(){
+	if( !checkCookie() ){
+    	alert("浏览器Cookie没启用，请重新设置Cookie");
+    	return;
+    }
+	if ($("#username").val() == "") {
+		alert('登入名不能为空');
+		return;
+	}
+	if ($("#pwd").val() == "") {
+		alert('登入密码不能为空');
+		return;
+	}
+	$.ajax({
+			type:"POST",
+			url:"login",
+			async: false,
+			data:$("#loginForm").serialize(),
+			success:function (data){
+				if( data == -1 ){
+					alert('用户名或密码错');
+				}else if( data == -2 ){
+					alert('权限错误');
+				}else{
+					window.location.href = "backEndMain";
+				}
+			}
+		});
+		
+}
 </script>
 </head>
 
 <body onLoad="MM_preloadImages('images/login_09_1.gif','images/login_10_1.gif')">
+<form method="post" id="loginForm">
 <table width="100%" height="100%" border="0" cellpadding="0" cellspacing="0">
   <tr>
     <td bgcolor="#02395f">&nbsp;</td>
@@ -61,11 +152,11 @@ function MM_swapImage() { //v3.0
                 <td height="81" background="images/login_06.gif"><table width="100%" border="0" cellspacing="0" cellpadding="0">
                   <tr>
                     <td width="24%"><div align="center"><font style="height:1;font-size:9pt; color:#bfdbeb;filter:glow(color=#1070a3,strength=1)">用户</font></div></td>
-                    <td width="76%" height="25"><input type="text" name="textfield"  style="width:125px; height:20px; background:#32a2e3; font-size:12px; border:solid 1px #0468a7; color:#14649f;"></td>
+                    <td width="76%" height="25"><input type="text" id="userName" name="userName"  style="width:125px; height:20px; background:#32a2e3; font-size:12px; border:solid 1px #0468a7; color:#14649f;"></td>
                   </tr>
                   <tr>
                     <td><div align="center"><font style="height:1;font-size:9pt; color:#bfdbeb;filter:glow(color=#1070a3,strength=1)">密码</font></div></td>
-                    <td height="25"><input type="password" name="textfield2"  style="width:125px; height:20px; background:#32a2e3; font-size:12px; border:solid 1px #0468a7; color:#14649f;"></td>
+                    <td height="25"><input type="password" id="pwd" name="pwd"  style="width:125px; height:20px; background:#32a2e3; font-size:12px; border:solid 1px #0468a7; color:#14649f;"></td>
                   </tr>
                 </table></td>
               </tr>
@@ -93,5 +184,6 @@ function MM_swapImage() { //v3.0
     <td bgcolor="#02609c">&nbsp;</td>
   </tr>
 </table>
+</form>
 </body>
 </html>

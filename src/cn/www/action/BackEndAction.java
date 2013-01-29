@@ -1,12 +1,17 @@
 package cn.www.action;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.convention.annotation.Action;
+import org.apache.struts2.convention.annotation.Result;
+import org.apache.struts2.convention.annotation.ResultPath;
 
 import cn.www.jdo.Brand;
 import cn.www.jdo.Category;
@@ -25,6 +30,7 @@ import cn.www.utils.query.QueryParam;
  * @author Administrator
  *
  */
+@ResultPath("/pages/backend")
 public class BackEndAction  extends BaseAction{
 
 	private static final long serialVersionUID = 1L;
@@ -33,6 +39,88 @@ public class BackEndAction  extends BaseAction{
 	private int pageNumber = 1;
 	@SuppressWarnings({ "unused", "rawtypes" })
 	private Page pager;
+	/************************用户登入和退出***********************************************/
+	@Action("login")
+	public void logIn(){
+		HttpServletRequest request = this.getRequest();
+		try{
+			String username = request.getParameter("userName");
+			String userpass = request.getParameter("pwd");
+			
+			int code = 1;
+			
+			List<QueryParam> parmaList = new ArrayList<QueryParam>();
+			QueryParam param = new QueryParam();
+			param.setField("userName");
+			param.setOp(OP.equal);
+			param.setValue(new Object[]{username});
+			parmaList.add(param);
+			
+			QueryParam param2 = new QueryParam();
+			param2.setField("userPass");
+			param2.setOp(OP.equal);
+			param2.setValue(new Object[]{MD5.toMD5(userpass.trim())});
+			parmaList.add(param2);
+			List<User> list = this.getCommonManager().findByCustomized( User.class, parmaList, null);
+			user = list.size()> 0 ? list.get(0) : null;
+			if(user == null){
+				// 用户名或密码错
+				this.outputData(-1);
+				return;
+			}else if( user.getRole()>2 ){
+				// 不是后台管理用户
+				this.outputData(-2);
+				return;
+			}else{
+					
+				String loginFlag = request.getParameter("loginFlag");
+				int times = 0;
+				if(loginFlag != null && loginFlag.equals("1")){
+					times = 14 * 24 * 60 * 60;
+				}else{
+					times = -1;
+				}
+				
+				this.clearUserByCookie();
+				this.addUserToCookie(user, times);
+				
+			}
+			this.outputData(code);
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+	}
+	
+
+	/**
+	 * 用户注销
+	 */
+	@Action(value="logout",results = { @Result(name = "success", location = "login",type="redirect") })
+	public String logout(){
+		HttpServletResponse response = this.getResponse();
+		Cookie[] cookies = this.getRequest().getCookies();
+		if(cookies != null){
+			for(int i = 0; i < cookies.length; i++){
+				cookies[i].setMaxAge(0);
+				cookies[i].setPath("/");
+				response.addCookie(cookies[i]);
+			}
+		}
+		try {
+			response.sendRedirect("");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return "success";
+	
+	}
+	/**
+	 * 进入后台主界面
+	 */
+	@Action("backEndMain")
+	public String backEndMain(){
+		return "index";
+	}
 	/*********************用户管理模块*****************************************/
 	private User user;
 	/**
