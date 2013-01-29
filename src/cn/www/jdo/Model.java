@@ -25,4 +25,40 @@ public class Model {
 	@Column(unique = true, nullable = false, length = 50)
 	private String name; //名
 	
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "brandId")
+	private Brand brand;// 关联品牌
+
+
+	public long getId() {
+		return id;
+	}
+
+
+	public void setId(long id) {
+		this.id = id;
+	}
+
+
+	public String getName() {
+		return name;
+	}
+
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+
+	public Brand getBrand() {
+		return brand;
+	}
+
+
+	public void setBrand(Brand brand) {
+		this.brand = brand;
+	}
+	
+	
 }

@@ -35,6 +35,9 @@ import com.opensymphony.xwork2.ActionSupport;
 public class BaseAction extends ActionSupport{
 
 	private CommonManager commonManager;
+	public CommonManager getCommonManager() {
+		return commonManager;
+	}
 	/**
 	 * 打印到前台
 	 * @param obj
@@ -116,7 +119,7 @@ public class BaseAction extends ActionSupport{
 	 * 清空Cookie
 	 *
 	 */
-	public static void clearUserByCookie(){
+	public void clearUserByCookie(){
 		HttpServletRequest request = ServletActionContext.getRequest();
 		HttpServletResponse response = ServletActionContext.getResponse();
 		Cookie[] cookies = request.getCookies();
@@ -159,7 +162,7 @@ public class BaseAction extends ActionSupport{
      * @throws IOException
      */
     public void downloadFile(File file, String filename) throws IOException{
-    	HttpServletResponse response = ServletActionContext.getResponse();
+    	HttpServletResponse response =getResponse();
 		InputStream fis = new FileInputStream(file);
 		byte[] buffer = new byte[fis.available()];
 		fis.read(buffer);

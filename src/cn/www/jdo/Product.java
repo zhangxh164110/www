@@ -30,6 +30,11 @@ public class Product {
 	@Column(unique = true, nullable = false, length = 50)
 	private String name; //名
 	
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "userId")
+	private User user;// 录入人
+	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "brandId")
 	private Brand brand;// 关联品牌（可以为空）
@@ -45,11 +50,11 @@ public class Product {
 	private Double discount; // 折扣
 	
 	@Column
-	private Integer status = 1; // 商品：1为正常，2为下架
+	private Integer status = 2; // 商品：1为上架，2为下架
 	
 	
 	@Temporal(TemporalType.DATE)
-	private Date createDate;//上架时间
+	private Date createDate= new java.util.Date();//录入时间
 	
 	@Column
 	private Integer count;//总数
@@ -60,5 +65,117 @@ public class Product {
 
 	@Column
 	private String htmlPath;//html连接
+
+
+	public long getId() {
+		return id;
+	}
+
+
+	public void setId(long id) {
+		this.id = id;
+	}
+
+
+	public String getName() {
+		return name;
+	}
+
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+
+	public Brand getBrand() {
+		return brand;
+	}
+
+
+	public void setBrand(Brand brand) {
+		this.brand = brand;
+	}
+
+
+	public Model getModel() {
+		return model;
+	}
+
+
+	public void setModel(Model model) {
+		this.model = model;
+	}
+
+
+	public Double getUnitsPrice() {
+		return unitsPrice;
+	}
+
+
+	public void setUnitsPrice(Double unitsPrice) {
+		this.unitsPrice = unitsPrice;
+	}
+
+
+	public Double getDiscount() {
+		return discount;
+	}
+
+
+	public void setDiscount(Double discount) {
+		this.discount = discount;
+	}
+
+
+	public Integer getStatus() {
+		return status;
+	}
+
+
+	public void setStatus(Integer status) {
+		this.status = status;
+	}
+
+
+	public Date getCreateDate() {
+		return createDate;
+	}
+
+
+	public void setCreateDate(Date createDate) {
+		this.createDate = createDate;
+	}
+
+
+	public Integer getCount() {
+		return count;
+	}
+
+
+	public void setCount(Integer count) {
+		this.count = count;
+	}
+
+
+	public Integer getSellCount() {
+		return sellCount;
+	}
+
+
+	public void setSellCount(Integer sellCount) {
+		this.sellCount = sellCount;
+	}
+
+
+	public String getHtmlPath() {
+		return htmlPath;
+	}
+
+
+	public void setHtmlPath(String htmlPath) {
+		this.htmlPath = htmlPath;
+	}
+	
+	
 	
 }

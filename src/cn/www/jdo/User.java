@@ -57,6 +57,14 @@ public class User implements Serializable {
 	@Column
 	private Integer role = 1;//1为后台管理者；2为后台编辑者，3前台注册用户
 
+	public Integer getRole() {
+		return role;
+	}
+
+	public void setRole(Integer role) {
+		this.role = role;
+	}
+
 	@Column
 	private String uuid; // 给激活用
 
