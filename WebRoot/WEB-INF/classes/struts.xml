@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 2.1//EN" "http://struts.apache.org/dtds/struts-2.1.dtd">
+<struts>
+	<include file="struts-default.xml" />
+	<constant name="struts.objectFactory" value="spring" />
+	<constant name="struts.devMode" value="true" />
+	<constant name="struts.multipart.maxSize" value="20480000"></constant>
+	<constant name="struts.multipart.saveDir" value="/tmp" />
+	<constant name="struts.ui.theme" value="simple" />
+	<constant name="struts.custom.i18n.resources" value="globalMessages,globalImages" />
+	<constant name="struts.i18n.reload" value="true" />
+	<constant name="struts.locale" value="zh_CN" />
+	<constant name="struts.i18n.encoding" value="utf-8" />
+	<constant name="struts.ognl.allowStaticMethodAccess" value="true" />
+	<constant name="struts.convention.default.parent.package" value="struts-cts"/>
+	<constant name="struts.convention.result.path" value="/pages" />
+
+	<package name="struts-cts" extends="struts-default">
+		<interceptors>
+			<interceptor name="authInterceptor" class="cn.chainco.cts.security.AuthInterceptor" />
+			<interceptor name="bisinessInterceptor" class="cn.chainco.cts.security.BinsinessInterceptor" />
+			<interceptor name="logInterceptor" class="cn.chainco.cts.security.LogInterceptor" />
+			<interceptor-stack name="ctsInterceptors">
+				<interceptor-ref name="logInterceptor" />
+				<interceptor-ref name="authInterceptor" />
+				<interceptor-ref name="bisinessInterceptor" />
+				<interceptor-ref name="defaultStack">  
+			        <param name="exception.logEnabled">true</param>  
+			        <param name="exception.logLevel">error</param>  
+			    </interceptor-ref> 
+			</interceptor-stack>
+		</interceptors>
+		<default-interceptor-ref name="ctsInterceptors" />
+		<default-action-ref name="page404" />
+		<global-results>
+			<result name="needLogin" type="redirect">logout.action</result>
+			<result name="needAuth">/cts/pages/common/authfailure.jsp</result>
+			<result name="exception">/cts/pages/common/exception.jsp</result>
+		</global-results>
+		<global-exception-mappings>
+			<exception-mapping result="exception" exception="java.lang.Exception" />
+		</global-exception-mappings>
+		
+		<action name="page404">
+			<result>/cts/pages/common/404.jsp</result>
+		</action>
+		
+	</package>
+</struts>

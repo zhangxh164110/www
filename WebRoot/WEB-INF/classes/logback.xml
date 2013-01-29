@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+
+<configuration>
+	<property resource="cts.properties" /> 
+	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+		<layout class="ch.qos.logback.classic.PatternLayout">
+			<Pattern>%d{HH:mm:ss.SSS} %-5level %logger{36} - %msg%n</Pattern>
+		</layout>
+	</appender>
+    <!-- 按照每天生成action的方法访问日志文件    
+    <appender name="actionMethod" class="ch.qos.logback.core.rolling.RollingFileAppender">   
+        <Encoding>UTF-8</Encoding>   
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">   
+            <FileNamePattern>${logPath}/logs/actionMethod.%d{yyyy-MM-dd}.log</FileNamePattern>
+            <minIndex>1</minIndex>
+            <maxIndex>5</maxIndex>
+            <MaxHistory>15</MaxHistory>
+        </rollingPolicy>           
+        <layout class="ch.qos.logback.classic.PatternLayout">   
+            <pattern>%d{HH:mm:ss.SSS} %msg%n</pattern>   
+       </layout>   
+    </appender>  
+    -->
+	<triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+	  <MaxFileSize>10MB</MaxFileSize>
+	</triggeringPolicy>
+	
+    <!-- 这里通过设置additivity="false"禁止actionMethod里的内容向上传递，否则会同时显示在默认的日志中 -->
+    <logger name="actionMethod" additivity="false" level="INFO">  
+		<span style="white-space:pre"></span>
+		<appender-ref ref="actionMethod" />  
+	</logger> 
+	
+	<logger name="cn.chainco" level="DEBUG" />
+	<logger name="org.hibernate.tool.hbm2ddl.TableMetadata" level="ERROR" />
+	<logger name="org.hibernate.cfg.SettingsFactory" level="ERROR" />
+	<logger name="org.hibernate.cfg.AnnotationBinder" level="ERROR" />
+	<logger name="org.hibernate.cfg.annotations.EntityBinder" level="ERROR" />
+	<logger name="com.opensymphony.xwork2.util.OgnlUtil" level="ERROR" />
+	<logger name="com.opensymphony.xwork2.ognl.OgnlValueStack" level="ERROR" />
+	<logger name="com.opensymphony.xwork2" level="ERROR" />
+	<root level="INFO">
+		<appender-ref ref="STDOUT" />
+	</root>
+</configuration>
