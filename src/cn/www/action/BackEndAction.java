@@ -130,7 +130,7 @@ public class BackEndAction  extends BaseAction{
 	public String listUser(){
 		List<QueryParam> paramList = new ArrayList<QueryParam>();
 		
-		if( user.getUserName()!=null && user.getUserName().trim().length()>0 ){
+		if(  user!=null && user.getUserName()!=null && user.getUserName().trim().length()>0 ){
 			QueryParam param = new QueryParam();
 			param.setField("userName");
 			param.setOp(OP.like);
@@ -138,7 +138,7 @@ public class BackEndAction  extends BaseAction{
 			paramList.add(param);
 		}
 	    pager = this.getCommonManager().findPageByCustomized(pageNumber, pageSize, User.class, paramList, null);
-	    return "";
+	    return "/user/listuser";
 	}
 	
 	/**
@@ -629,4 +629,126 @@ public class BackEndAction  extends BaseAction{
 	private boolean isExsitProductData( long id ){
 		return this.getCommonManager().findByCustomizedSQL( SellRecord.class, "productId="+id).size()>0;
 	}
+
+
+	public long getId() {
+		return id;
+	}
+
+
+	public void setId(long id) {
+		this.id = id;
+	}
+
+
+	public int getPageSize() {
+		return pageSize;
+	}
+
+
+	public void setPageSize(int pageSize) {
+		this.pageSize = pageSize;
+	}
+
+
+	public int getPageNumber() {
+		return pageNumber;
+	}
+
+
+	public void setPageNumber(int pageNumber) {
+		this.pageNumber = pageNumber;
+	}
+
+
+	public Page getPager() {
+		return pager;
+	}
+
+
+	public void setPager(Page pager) {
+		this.pager = pager;
+	}
+
+
+	public User getUser() {
+		return user;
+	}
+
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+
+
+	public Category getCategory() {
+		return category;
+	}
+
+
+	public void setCategory(Category category) {
+		this.category = category;
+	}
+
+
+	public List<Category> getListCategory() {
+		return listCategory;
+	}
+
+
+	public void setListCategory(List<Category> listCategory) {
+		this.listCategory = listCategory;
+	}
+
+
+	public Brand getBrand() {
+		return brand;
+	}
+
+
+	public void setBrand(Brand brand) {
+		this.brand = brand;
+	}
+
+
+	public List<Brand> getListBrand() {
+		return listBrand;
+	}
+
+
+	public void setListBrand(List<Brand> listBrand) {
+		this.listBrand = listBrand;
+	}
+
+
+	public Model getModel() {
+		return model;
+	}
+
+
+	public void setModel(Model model) {
+		this.model = model;
+	}
+
+
+	public List<Model> getListModel() {
+		return listModel;
+	}
+
+
+	public void setListModel(List<Model> listModel) {
+		this.listModel = listModel;
+	}
+
+
+	public Product getProduct() {
+		return product;
+	}
+
+
+	public void setProduct(Product product) {
+		this.product = product;
+	}
+	
+	
 }

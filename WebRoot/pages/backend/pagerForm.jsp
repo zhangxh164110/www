@@ -28,11 +28,11 @@
 		
 		initHtml+='<span style="float:left;margin-top:3px; line-height:20px;height:20px;" >';
 		if(pageNumberCommon>1){
-			initHtml+='&nbsp;<img style="cursor: pointer" src="images/page-first-disabled01.gif" onclick="javascript:homePage(\''+urlPageCommon+'\','+field+')" />';
-			initHtml+='<img style="cursor: pointer" src="images/page-prev-disabled01.gif" onclick="javascript:lastPage(\''+urlPageCommon+'\','+field+')" />';
+			initHtml+='&nbsp;<img style="cursor: pointer" src="pages/backend/images/page-first-disabled01.gif" onclick="javascript:homePage(\''+urlPageCommon+'\','+field+')" />';
+			initHtml+='<img style="cursor: pointer" src="pages/backend/images/page-prev-disabled01.gif" onclick="javascript:lastPage(\''+urlPageCommon+'\','+field+')" />';
 		}else{
-			initHtml+='<img src="images/page-first-disabled.gif" />';
-			initHtml+='<img src="images/page-prev-disabled.gif"  />';
+			initHtml+='<img src="pages/backend/images/page-first-disabled.gif" />';
+			initHtml+='<img src="pages/backend/images/page-prev-disabled.gif"  />';
 		}
 		initHtml+='</span>';
 		
@@ -42,11 +42,11 @@
 		
 		initHtml+='<span style="float:left;margin-top:3px; line-height:20px;height:20px;" >';
 		if(pageNumberCommon < pageCountCommon){
-			initHtml+='<img style="cursor: pointer" src="images/text-prev-disabled01.gif" onclick="javascript:nextPage(\''+urlPageCommon+'\', '+field+')"/>';
-			initHtml+='<img style="cursor: pointer" src="images/text-first-disabled01.gif" onclick="javascript:endPage(\''+urlPageCommon+'\','+field+')" />';
+			initHtml+='<img style="cursor: pointer" src="pages/backend/images/text-prev-disabled01.gif" onclick="javascript:nextPage(\''+urlPageCommon+'\', '+field+')"/>';
+			initHtml+='<img style="cursor: pointer" src="pages/backend/images/text-first-disabled01.gif" onclick="javascript:endPage(\''+urlPageCommon+'\','+field+')" />';
 		}else{
-			initHtml+='<img src="images/text-prev-disabled.gif"/>';
-			initHtml+='<img src="images/text-first-disabled.gif"/>';
+			initHtml+='<img src="pages/backend/images/text-prev-disabled.gif"/>';
+			initHtml+='<img src="pages/backend/images/text-first-disabled.gif"/>';
 		}
 		initHtml+='</span>';
 		

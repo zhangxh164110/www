@@ -17,13 +17,7 @@
 
 	<package name="struts-cts" extends="struts-default">
 		<interceptors>
-			<interceptor name="authInterceptor" class="cn.chainco.cts.security.AuthInterceptor" />
-			<interceptor name="bisinessInterceptor" class="cn.chainco.cts.security.BinsinessInterceptor" />
-			<interceptor name="logInterceptor" class="cn.chainco.cts.security.LogInterceptor" />
 			<interceptor-stack name="ctsInterceptors">
-				<interceptor-ref name="logInterceptor" />
-				<interceptor-ref name="authInterceptor" />
-				<interceptor-ref name="bisinessInterceptor" />
 				<interceptor-ref name="defaultStack">  
 			        <param name="exception.logEnabled">true</param>  
 			        <param name="exception.logLevel">error</param>  
