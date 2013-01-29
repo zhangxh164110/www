@@ -93,7 +93,7 @@ public class BackEndAction  extends BaseAction{
 	
 
 	/**
-	 * 用户注销
+	 * 用户注销sss
 	 */
 	@Action(value="logout",results = { @Result(name = "success", location = "login",type="redirect") })
 	public String logout(){
