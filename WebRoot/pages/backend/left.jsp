@@ -5,9 +5,9 @@
 <meta http-equiv="Content-Type" content="text/html; charset=gb2312" />
 <title>管理页面</title>
 
-<script src="js/prototype.lite.js" type="text/javascript"></script>
-<script src="js/moo.fx.js" type="text/javascript"></script>
-<script src="js/moo.fx.pack.js" type="text/javascript"></script>
+<script src="${pageContext.request.contextPath}/pages/backend/js/prototype.lite.js" type="text/javascript"></script>
+<script src="${pageContext.request.contextPath}/pages/backend/js/moo.fx.js" type="text/javascript"></script>
+<script src="${pageContext.request.contextPath}/pages/backend/js/moo.fx.pack.js" type="text/javascript"></script>
 <style>
 body {
 	font:12px Arial, Helvetica, sans-serif;
@@ -151,11 +151,11 @@ H1 a {
           </tr>
         </table>
         <ul class="MM">
-          <li><a href="#" target="main">用户设置</a></li>
-          <li><a href="#" target="main">菜单设置</a></li>
-          <li><a href="#" target="main">品牌设置</a></li>
-          <li><a href="#" target="main">型号设置</a></li>
-          <li><a href="#" target="main">产品设置</a></li>
+          <li><a href="${pageContext.request.contextPath}/listUser" target="main">用户设置</a></li>
+          <li><a href="${pageContext.request.contextPath}/listCategory" target="main">菜单设置</a></li>
+          <li><a href="${pageContext.request.contextPath}/listBrand" target="main">品牌设置</a></li>
+          <li><a href="${pageContext.request.contextPath}/listModel" target="main">型号设置</a></li>
+          <li><a href="${pageContext.request.contextPath}/listProduct" target="main">产品设置</a></li>
         </ul>
       </div>
       

@@ -34,7 +34,8 @@ public class Product {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "userId")
 	private User user;// 录入人
-	
+
+
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "brandId")
 	private Brand brand;// 关联品牌（可以为空）
@@ -177,5 +178,14 @@ public class Product {
 	}
 	
 	
+	public User getUser() {
+		return user;
+	}
+
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+
 	
 }

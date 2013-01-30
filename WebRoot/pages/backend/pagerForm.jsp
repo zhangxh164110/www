@@ -2,6 +2,13 @@
 <%@ taglib prefix="s" uri="/struts-tags" %>
 <script type="text/javascript">
     /***************此分页用有有pager对象的*******************/
+    var urlPageCommon = '';
+    function getParam(){
+  		var form = document.getElementById('searchForm');
+  		form.action = urlPageCommon;	
+     	form.submit();
+  	}
+  		
 	function paginationCommon(field){
 		var initHtml="";
 		var pageNumberCommon =parseInt(<s:property value="pager.pageNumber"/>);
@@ -24,7 +31,7 @@
 		}
 		
 		
-		var urlPageCommon=document.getElementById("urlforward").value;
+		urlPageCommon=document.getElementById("urlforward").value;
 		
 		initHtml+='<span style="float:left;margin-top:3px; line-height:20px;height:20px;" >';
 		if(pageNumberCommon>1){

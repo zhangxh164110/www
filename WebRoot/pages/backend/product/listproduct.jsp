@@ -4,7 +4,7 @@
 <jsp:include flush="true" page="../pagerForm.jsp"></jsp:include>
 <html>
   <head>
-    <title>用户</title>
+    <title>品牌</title>
    
     <link href="${pageContext.request.contextPath}/pages/backend/css/skin.css" rel="stylesheet" type="text/css">
     <link href="${pageContext.request.contextPath}/pages/backend/css/admin.css" rel="stylesheet" type="text/css">
@@ -12,22 +12,12 @@
 	<script type="text/javascript" src="${pageContext.request.contextPath}/js/common.js"></script>
     <script>
 		function addOrEdit( idVal ){
-			window.location.href = '${pageContext.request.contextPath}/editUser?id='+idVal;
+			window.location.href = 'editProduct?id='+idVal;
 		}
 		function searchData(){
-			var url = '${pageContext.request.contextPath}/listUser.action';
+			var url = 'lisetProduct';
 			document.getElementById('searchForm').action = url;
 			document.getElementById('searchForm').submit();
-		}
-		function changeStatus( sta,idVal ){
-			var url = '${pageContext.request.contextPath}/chageUserStauts?id='+idVal+'&status='+sta;
-			$.post(url, null, function(data){
-				if( data  == 1 ){
-					alert("系统繁忙，请稍后");
-				}else{
-					window.location.reload();
-				}
-			});
 		}
     </script>
     
@@ -41,7 +31,7 @@
     <td valign="top" background="${pageContext.request.contextPath}/pages/backend/images/content-bg.gif">
 	    <table width="100%" height="31" border="0" cellpadding="0" cellspacing="0" class="left_topbg" id="table2">
 	      <tr>
-	        <td height="31"><div class="titlebt">用户列表</div></td>
+	        <td height="31"><div class="titlebt">商品列表</div></td>
 	      </tr>
 	    </table>
     </td>
@@ -51,24 +41,6 @@
    <tr>
    	<td valign="middle" background="${pageContext.request.contextPath}/pages/backend/images/mail_leftbg.gif">&nbsp;</td>
   	<td valign="top"  class="main-td">
-  	<!-- 搜索 -->
-  	<div class="pageHeader">
-	  <div class="searchBar">
-	  	<table cellpadding="0" cellspacing="0" class="searchContent">
-	  		<tr>
-	  			<td>用户：<input type="text" name="user.userName" class="textInput" value="<s:property value="user.userName"/>"/></td>
-	  		</tr>
-	  	</table>
-	  </div>
-	  <div>
-	  	<table style="width: 100%" cellpadding="0" cellspacing="0">
-	  		<tr>
-	  			<td align="right"><input type="button" class="pointer" value="检索" onclick="searchData();"/> &nbsp;&nbsp;</td>
-	  		</tr>
-	  	</table>
-	  </div>
-	</div>
-	<div class="margin-up-down clear"></div>
 	
 	<div class="gridViewBtn">
 		<a href="javascript:addOrEdit(0);">添加</a>
@@ -78,44 +50,55 @@
 	<!-- list集合页 -->
   		<table width="100%" cellpadding="0" cellspacing="0" border="0" class="gridView">
   			<tr>
-	  			<th>用户名</th>
-	  			<th>权限</th>
+	  			<th>名称</th>
+	  			<th>关联品牌</th>
+	  			<th>关联型号</th>
+	  			<th>单价</th>
+	  			<th>折扣</th>
+	  			<th>录入时间</th>
+	  			<th>总数</th>
+	  			<th>销售数</th>
 	  			<th>操作</th>
   			</tr>
   			<s:iterator value="pager.elements">
   				<tr>
   					<td>
-  						<s:property value="userName"/>
+  						<s:property value="name"/>&nbsp;
   					</td>
   					<td>
-  						<s:if test="role==1">
-  							管理员
-  						</s:if>
-  						<s:elseif test="role==2">
-  							编辑者
-  						</s:elseif>
+  						<s:property value="brand.name"/>&nbsp;
+  					</td>
+  					<td>
+  						<s:property value="model.name"/>&nbsp;
+  					</td>
+  					<td>
+  						<s:property value="unitsPrice"/>&nbsp;
+  					</td>
+  					<td>
+  						<s:property value="discount"/>
+  						&nbsp;
+  					</td>
+  					<td>
+  						<s:date name="createDate" format="yyyy-MM-dd"/>
+  						&nbsp;
+  					</td>
+  					<td>
+  						<s:property value="count"/>
+  						&nbsp;
+  					</td>
+  					<td>
+  						<s:property value="sellCount"/>
   						&nbsp;
   					</td>
   					<td>
   						<a href="javascript:addOrEdit('<s:property value="id"/>');">编辑</a>
-  						&nbsp;|&nbsp;
-  						<a href="javascript:changeStatus('<s:property value="status"/>','<s:property value="id"/>');">
-  							<s:if test="role!=0">
-	  							<s:if test="status==1">
-	  								启用
-	  							</s:if>
-	  							<s:elseif test="status==2">
-	  								禁用
-	  							</s:elseif>
-  							</s:if>
-  						</a>
-  						&nbsp;|&nbsp;
-  						<a href="javascript:delObj('delUser','<s:property value="id"/>');">删除</a>
+  						&nbsp;&nbsp;|&nbsp;&nbsp;
+  						<a href="javascript:delObj('delProduct','<s:property value="id"/>');">删除</a>
   					</td>
   				</tr>
   			</s:iterator>
   		</table>
-  		<input type="hidden" id="urlforward" value="listUser.action" />
+  		<input type="hidden" id="urlforward" value="lisetProduct" />
 		<div id="pagination" valign="middle" class="pagination" ></div>
   	</td>
   	<td background="${pageContext.request.contextPath}/pages/backend/images/mail_rightbg.gif">&nbsp;</td>

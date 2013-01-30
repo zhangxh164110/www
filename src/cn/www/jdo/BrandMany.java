@@ -1,8 +1,5 @@
 package cn.www.jdo;
 
-import java.util.List;
-
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -11,25 +8,27 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 
 /**
  * 品牌表
  */
 @Entity
-@Table(name = "p_brand")
-public class Brand {
+@Table(name = "p_brand_many")
+public class BrandMany {
 	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
 	
-	@Column(unique = true, nullable = false, length = 50)
-	private String name; //品牌名
 	
-	@Transient
-	private List<Category> list; // 可选临时字段
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "brandId")
+	private Brand brand;// 关联品牌
+	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "categoryId")
+	private Category category;// 关联菜单
 
 
 	public long getId() {
@@ -42,26 +41,25 @@ public class Brand {
 	}
 
 
-	public String getName() {
-		return name;
+
+	public Category getCategory() {
+		return category;
 	}
 
 
-	public void setName(String name) {
-		this.name = name;
+	public void setCategory(Category category) {
+		this.category = category;
 	}
 
 
-	public List<Category> getList() {
-		return list;
+	public Brand getBrand() {
+		return brand;
 	}
 
 
-	public void setList(List<Category> list) {
-		this.list = list;
+	public void setBrand(Brand brand) {
+		this.brand = brand;
 	}
-
-
 
 	
 }

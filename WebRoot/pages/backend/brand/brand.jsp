@@ -4,27 +4,27 @@
 
 <html>
   <head>
-    <title>添加/编辑用户</title>
+    <title>添加/编辑菜单</title>
     <link href="${pageContext.request.contextPath}/pages/backend/css/skin.css" rel="stylesheet" type="text/css" />
     <script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery.js"></script>
     <script>
     	
-    	var id = '<s:property value="user.id"/>';
-    	var oldName = '<s:property value="user.userName"/>';
-    	function saveUser(){
-    		if( checkName() && checkPwd() && checkEnterPwd() ){
+    	var id = '<s:property value="brand.id"/>';
+    	var oldName = '<s:property value="brand.name"/>';
+    	function saveBrand(){
+    		if( checkName()){
     			$.ajax({
 				type:"POST",
-				url:"saveUser",
+				url:"saveBrand",
 				cache:false,
-				data:$("#registForm").serialize(),
+				data:$("#editForm").serialize(),
 				success:function (data){
 					if(data == 1){
 						alert("用户名称已经存在");
 					}else if(data == 2){
 						alert("系统繁忙，请稍后再试");
 					}else{
-					   var url = 'listUser';
+					   var url = 'listBrand';
 					   window.location.href = url;
 					}
 				}
@@ -35,22 +35,18 @@
     	}
     	
     	function checkName(){
-		var name=$('#nickname').val();
-		var nameSpan=$('#reg_username_span');
-		if($.trim(name).length==0 || getStringLength2(name) > 10 || $.trim(name).length<3 || !/[^\d|chun]/.test(name)){
-			nameSpan.html("<font color='#de731d'>请使用英文a-z及数字1-9组合,限10位字符</font>");
-			return false;
-		}else{
+			var name=$('#nickname').val();
+			var nameSpan=$('#reg_username_span');
 		    if( id !=0 && oldName!= $.trim(name) ){
 		    	var a=false;
 					$.ajax({
-					url:"${pageContext.request.contextPath}/isNameExist",
-					data:"userName="+name,
+					url:"${pageContext.request.contextPath}/isNameBrandExist",
+					data:"name="+name,
 					cache:false,
 					async: false,
 					success:function (data){
 						if(data==1){
-							nameSpan.html("<font color='#de731d'>用户已存在</font>");
+							nameSpan.html("<font color='#de731d'>名称已存在</font>");
 							a=false;
 						}else{
 							nameSpan.html("");
@@ -61,57 +57,10 @@
 				return a;
 		    }
 			return true;
-		}
-	}
-	
-	function checkPwd(){
-		var pwd=$('#pwd1').val();
-		var pwdSpan=$('#reg_userpass_span');
-		if( id == 0 ){
-			if($.trim(pwd).length==0 || $.trim(pwd).length>16 || $.trim(pwd).length<6){
-				pwdSpan.html("<font color='#de731d'>请输入6-16位的用户密码</font>");
-				return false;
-			}
-		}
-		pwdSpan.html("");
-		
-		var enterPwd = $("#pwd2");
-	    var pwdSpan2 = $("#userEnterPass_span");
-	    if(enterPwd.val() != '' && pwd != enterPwd.val()){
-	         pwdSpan2.html("<font color='#de731d'>密码与重复密码不一致</font>");
-	         return false;
-	    }
-	    
-	    pwdSpan2.html("");	    
-		return true;
 	}
 	
 	
 	
-	function checkEnterPwd(){
-	   var pwd = $("#pwd1");
-	   var enterPwd = $("#pwd2");
-	   var pwdSpan = $("#userEnterPass_span");
-	   
-	   if(pwd.val() != enterPwd.val()){
-	      pwdSpan.html("<font color='#de731d'>密码与重复密码不一致</font>");
-	      return false;
-	   }
-	   
-	    pwdSpan.html("");
-		return true;
-	}
-	function getStringLength2(str){
-		var len = 0;
-		var cnstrCount = 0; 
-		for(var i = 0 ; i < str.length ; i++){  
-			if(str.charCodeAt(i)>255){
-				cnstrCount = cnstrCount + 1 ;
-			}
-		}
-		len = str.length + cnstrCount;
-		return len;
-	}
     </script>
   </head>
   <body>
@@ -123,7 +72,7 @@
     <td valign="top" background="${pageContext.request.contextPath}/pages/backend/images/content-bg.gif">
 	    <table width="100%" height="31" border="0" cellpadding="0" cellspacing="0" class="left_topbg" id="table2">
 	      <tr>
-	        <td height="31"><div class="titlebt">编辑用户</div></td>
+	        <td height="31"><div class="titlebt">编辑品牌</div></td>
 	      </tr>
 	    </table>
     </td>
@@ -133,30 +82,23 @@
   <tr>
   	<td valign="middle" background="${pageContext.request.contextPath}/pages/backend/images/mail_leftbg.gif">&nbsp;</td>
   	<td valign="top">
-  		<form action="regUser" id="registForm">
-  		<s:hidden name="user.role"  value="2"/>
-  		<input type="hidden" name="oldName" value="<s:property value="user.userName"/>">
-  		<s:hidden name="user.id"/>
-  		<s:hidden name="user.status" value="2"></s:hidden>
+  		<form action="" id="editForm">
+  		<input type="hidden" name="oldName" value="<s:property value="brand.name"/>">
+  		<s:hidden name="brand.id"/>
   		<table class="form_table" width="100%">
   			<tr>
-  				<td style="text-align: right;"><font color="red">*</font>用户名</td>
-  				<td><s:textfield name="user.userName" id="nickname"/><span id="reg_username_span"></span></td>
-  			</tr>
-  			
-  			
-  			<tr>
-  				<td style="text-align: right;"><font color="red">*</font>密码</td>
-  				<td><s:password name="user.userPass" id="pwd1"/><span id="reg_userpass_span"></span></td>
+  				<td style="text-align: right;"><font color="red">*</font>名称</td>
+  				<td><s:textfield name="brand.name" id="nickname"/><span id="reg_username_span"></span></td>
   			</tr>
   			<tr>
-  				<td style="text-align: right;"><font color="red">*</font>确认密码</td>
-  				<td><input type="password" id="pwd2"/><span id="userEnterPass_span"></span></td>
+  				<td style="text-align: right;">关联</td>
+  				<td>
+  					<s:checkboxlist list="listCategory" listKey="id" listValue="name" name="categorys" value="#request.list.{id}"></s:checkboxlist>
+  				</td>
   			</tr>
-  			
   			<tr>
   				<td colspan="3" style="text-align: center;">
-  					<input type="button" value="提交" onclick="saveUser();"/>
+  					<input type="button" value="提交" onclick="saveBrand();"/>
   				</td>
   			</tr>
   		</table>

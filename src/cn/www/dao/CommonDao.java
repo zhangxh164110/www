@@ -1,5 +1,5 @@
 package cn.www.dao;
 
-public interface CommonDao extends GenericDao<Object, Long> {
 
+public interface CommonDao extends GenericDao<Object, Long> {
 }

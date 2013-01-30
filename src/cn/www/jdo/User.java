@@ -55,7 +55,7 @@ public class User implements Serializable {
 	private Integer status = 1; // 用户状态：1为正常，2为禁用
 	
 	@Column
-	private Integer role = 1;//1为后台管理者；2为后台编辑者，3前台注册用户
+	private Integer role = 2;//1为后台管理者；2为后台编辑者，3前台注册用户
 
 	public Integer getRole() {
 		return role;

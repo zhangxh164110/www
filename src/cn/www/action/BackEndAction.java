@@ -14,11 +14,13 @@ import org.apache.struts2.convention.annotation.Result;
 import org.apache.struts2.convention.annotation.ResultPath;
 
 import cn.www.jdo.Brand;
+import cn.www.jdo.BrandMany;
 import cn.www.jdo.Category;
 import cn.www.jdo.Model;
 import cn.www.jdo.Product;
 import cn.www.jdo.SellRecord;
 import cn.www.jdo.User;
+import cn.www.utils.CommUtils;
 import cn.www.utils.MD5;
 import cn.www.utils.TimeUtil;
 import cn.www.utils.query.OP;
@@ -40,11 +42,15 @@ public class BackEndAction  extends BaseAction{
 	@SuppressWarnings({ "unused", "rawtypes" })
 	private Page pager;
 	/************************用户登入和退出***********************************************/
+	@Action("toLogin")
+	public String toLogin(){
+		return "login";
+	}
 	@Action("login")
-	public void logIn(){
+	public void login(){
 		HttpServletRequest request = this.getRequest();
 		try{
-			String username = request.getParameter("userName");
+			String username = request.getParameter("username");
 			String userpass = request.getParameter("pwd");
 			
 			int code = 1;
@@ -95,7 +101,7 @@ public class BackEndAction  extends BaseAction{
 	/**
 	 * 用户注销sss
 	 */
-	@Action(value="logout",results = { @Result(name = "success", location = "login",type="redirect") })
+	@Action(value="logout",results = { @Result(name = "success", location = "toLogin",type="redirect") })
 	public String logout(){
 		HttpServletResponse response = this.getResponse();
 		Cookie[] cookies = this.getRequest().getCookies();
@@ -105,11 +111,6 @@ public class BackEndAction  extends BaseAction{
 				cookies[i].setPath("/");
 				response.addCookie(cookies[i]);
 			}
-		}
-		try {
-			response.sendRedirect("");
-		} catch (IOException e) {
-			e.printStackTrace();
 		}
 		return "success";
 	
@@ -151,7 +152,7 @@ public class BackEndAction  extends BaseAction{
 		}else{
 			user = this.getCommonManager().findEntityByPK( User.class,id);
 		}
-		return "";
+		return "/user/user";
 	}
 	
 	/**
@@ -162,10 +163,8 @@ public class BackEndAction  extends BaseAction{
 		try {
 			HttpServletRequest request = ServletActionContext.getRequest();
 			String oldName = request.getParameter("oldName");
-			String md5 = request.getParameter("md5");
 			
 			if( user.getUserPass().trim().length()>0) user.setUserPass( MD5.toMD5( user.getUserPass()));
-			else user.setUserPass( md5 );
 			if( user.getId() == 0 ){
 				if( this.isExistUser( user.getUserName())){
 					this.outputData(1);
@@ -180,6 +179,7 @@ public class BackEndAction  extends BaseAction{
 				User oldUser = this.getCommonManager().findEntityByPK( User.class, user.getId());
 				oldUser.setUserName( user.getUserName() );
 				oldUser.setStatus( user.getStatus() );
+				if( user.getUserPass().trim().length()>0) oldUser.setUserPass( user.getUserPass());
 				this.getCommonManager().modifyEntity( oldUser );
 			}
 			this.clearUserByCookie();
@@ -191,7 +191,14 @@ public class BackEndAction  extends BaseAction{
 		}
 			
 	}
-	
+	@Action("isNameExist")
+	public void isNameExist(){
+		
+		if( this.isExistUser( this.getRequest().getParameter("userName"))){
+			this.outputData(1);
+		}
+		this.outputData(2);
+	}
 	//判断用户是否存在
 	private boolean isExistUser( String name ){
 		List<QueryParam> paramList = new ArrayList<QueryParam>();
@@ -209,18 +216,13 @@ public class BackEndAction  extends BaseAction{
 	@Action("delUser")
 	public void delUser(){
 		try {
-			try {
-				if( !isExsitUserData(id) ){
-					this.getCommonManager().deleteEntityByPK( User.class, id );
-					this.outputData(1);
-					return;
-				}
-				this.outputData(3);
+			if( !isExsitUserData(id) ){
+				this.getCommonManager().deleteEntityByPK( User.class, id );
+				this.outputData(1);
 				return;
-			} catch (Exception e) {
-				e.printStackTrace();
-				this.outputData(2);
 			}
+			this.outputData(3);
+			return;
 		} catch (Exception e) {
 			e.printStackTrace();
 			this.outputData(2);
@@ -230,16 +232,40 @@ public class BackEndAction  extends BaseAction{
 	private boolean isExsitUserData( long id ){
 		return this.getCommonManager().findByCustomizedSQL( Product.class, "userId="+id).size()>0;
 	}
+	
+	/**
+	 * 禁止/取消禁止用户(修改模特VIP状态)
+	 */
+	@Action("chageUserStauts")
+	public void chageUserStauts() {
+		HttpServletRequest request = this.getRequest();
+		String status = request.getParameter("status");
+		user = this.getCommonManager().findEntityByPK(User.class, id);
+		if (status.equals("1")) {
+			user.setStatus(2);
+		} else if (status.equals("2") || status.equals("0")) {
+			user.setStatus(1);
+		}
+		int code = 0;
+		try {
+			this.getCommonManager().modifyEntity(user);
+		} catch (Exception e) {
+			code = 1;
+			e.printStackTrace();
+		}
+		this.outputData(code);
+	}
+
 	/*******************************菜单******************************************/
 	private Category category;
 	private List<Category> listCategory;
 	/**
 	 * 菜单列表
 	 */
-	@Action("lisetCategory")
-	public String lisetCategory(){
+	@Action("listCategory")
+	public String listCategory(){
 		pager = this.getCommonManager().findPageByCustomized( pageNumber, pageSize, Category.class,null, null);
-		return "";
+		return "/category/listcategory";
 	}
 	
 	/**
@@ -255,7 +281,7 @@ public class BackEndAction  extends BaseAction{
 		}else{
 			category = this.getCommonManager().findEntityByPK( Category.class, id );
 		}
-		return "";
+		return "/category/category";
 	}
 	
 	/**
@@ -264,6 +290,7 @@ public class BackEndAction  extends BaseAction{
 	@Action("saveCategory")
 	public void saveCategory(){
 		try {
+			if( category.getParent().getId() == 0 ) category.setParent( null );
 			if( category.getId() == 0 ){
 				if( isExistCategory(category.getName()) ){
 					this.outputData(1);
@@ -287,6 +314,14 @@ public class BackEndAction  extends BaseAction{
 		}
 	}
 
+	@Action("isNameCategoryExist")
+	public void isNameCategoryExist(){
+		if( this.isExistCategory( this.getRequest().getParameter("name"))){
+			this.outputData(1);
+		}
+		this.outputData(2);
+	}
+	
 	//判断菜单是否存在
 	private boolean isExistCategory( String name ){
 		List<QueryParam> paramList = new ArrayList<QueryParam>();
@@ -317,26 +352,24 @@ public class BackEndAction  extends BaseAction{
 	/**
 	 * 品牌列表
 	 */
-	@Action("lisetBrand")
-	public String lisetBrand(){
+	@Action("listBrand")
+	public String listBrand(){
 		listCategory = this.getCommonManager().findByCustomized( Category.class, null, null);
 		List<QueryParam> paramList = new ArrayList<QueryParam>();
-		if( brand.getName()!=null && brand.getName().trim().length()>0 ){
+		if(brand!=null &&  brand.getName()!=null && brand.getName().trim().length()>0 ){
 			QueryParam param = new QueryParam();
 			param.setField("name");
 			param.setOp(OP.like);
 			param.setValue(new Object[]{ "%"+brand.getName()+"%"});
 			paramList.add(param);
 		}
-		if( brand.getCategory()!=null && brand.getCategory().getId()!=0 ){
-			QueryParam param2 = new QueryParam();
-			param2.setField("category.id");
-			param2.setOp(OP.equal);
-			param2.setValue(new Object[]{ brand.getCategory().getId()});
-			paramList.add(param2);
-		}
 		pager = this.getCommonManager().findPageByCustomized( pageNumber, pageSize, Brand.class,null, null);
-		return "";
+		List<Brand> list = pager.getCurrentPageElements();
+		for( Brand obj: list ){
+			obj.setList( this.getCategoryByBrand(obj));
+		}
+		pager.setElements( list );
+		return "/brand/listbrand";
 	}
 	
 	/**
@@ -350,16 +383,43 @@ public class BackEndAction  extends BaseAction{
 			brand = new Brand();
 		}else{
 			brand = this.getCommonManager().findEntityByPK( Brand.class, id );
+			List<Category> list = getCategoryByBrand(brand);
+			this.getRequest().setAttribute("list", list);
 		}
-		return "";
+		return "/brand/brand";
 	}
 	
+	private List<Category> getCategoryByBrand(Brand brand ){
+		List<QueryParam> paramList = new ArrayList<QueryParam>();
+		QueryParam param = new QueryParam();
+		param.setField("brand");
+		param.setOp(OP.equal);
+		param.setValue(new Object[]{ brand });
+		paramList.add(param);
+		List<BrandMany> list = this.getCommonManager().findByCustomized( BrandMany.class , paramList, null);
+		List<Category> listCategory = new ArrayList<Category>();
+		for( BrandMany obj: list ){
+			listCategory.add(obj.getCategory());
+		}
+		return listCategory;
+	}
+	private List<BrandMany> getBrandManyByBrand(Brand brand ){
+		List<QueryParam> paramList = new ArrayList<QueryParam>();
+		QueryParam param = new QueryParam();
+		param.setField("brand");
+		param.setOp(OP.equal);
+		param.setValue(new Object[]{ brand });
+		paramList.add(param);
+		List<BrandMany> list = this.getCommonManager().findByCustomized( BrandMany.class , paramList, null);
+		return list;
+	}
 	/**
 	 * 保存品牌
 	 */
 	@Action("saveBrand")
 	public void saveBrand(){
 		try {
+			
 			if( brand.getId() == 0 ){
 				if( isExistBrand(brand.getName()) ){
 					this.outputData(1);
@@ -367,22 +427,47 @@ public class BackEndAction  extends BaseAction{
 				}
 				this.getCommonManager().saveEntity( brand );
 			}else{
+				
 				String oldName = this.getRequest().getParameter("oldName");
 				if( !brand.getName().equals(oldName) && isExistBrand(brand.getName())){
 					this.outputData(1);
 					return;
 				}
 				Brand obj = this.getCommonManager().findEntityByPK( Brand.class, brand.getId());
-				obj.setCategory( brand.getCategory() );
 				obj.setName( brand.getName() );
 				this.getCommonManager().modifyEntity( obj );
+				
+				//删除原来关联的数据
+				List<BrandMany> list = getBrandManyByBrand(brand);
+				for( BrandMany o: list ){
+					this.getCommonManager().deleteEntity(o);
+				}
 			}
+			
+
+			String[] categorys =this.getRequest().getParameterValues("categorys");
+			for( String obj: categorys ){
+				if( CommUtils.isCorrectNumber( obj )){
+					BrandMany newObj = new BrandMany();
+					newObj.setBrand(brand);
+					newObj.setCategory( this.getCommonManager().findEntityByPK( Category.class, Long.parseLong(obj)));
+					this.getCommonManager().saveEntity( newObj);
+				}
+			}
+			
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 			this.outputData(2);
 		}
 	}
-
+	@Action("isNameBrandExist")
+	public void isNameBrandExist(){
+		if( this.isExistBrand( this.getRequest().getParameter("name"))){
+			this.outputData(1);
+		}
+		this.outputData(2);
+	}
 	//判断品牌是否存在
 	private boolean isExistBrand( String name ){
 		List<QueryParam> paramList = new ArrayList<QueryParam>();
@@ -423,8 +508,8 @@ public class BackEndAction  extends BaseAction{
 	/**
 	 * 型号列表
 	 */
-	@Action("lisetModel")
-	public String lisetModel(){
+	@Action("listModel")
+	public String listModel(){
 		listBrand = this.getCommonManager().findByCustomized( Brand.class, null, null);
 		List<QueryParam> paramList = new ArrayList<QueryParam>();
 		
@@ -489,7 +574,15 @@ public class BackEndAction  extends BaseAction{
 			this.outputData(2);
 		}
 	}
-
+	
+	
+	@Action("isNameModelExist")
+	public void isNameModelExist(){
+		if( this.isExistBrand( this.getRequest().getParameter("name"))){
+			this.outputData(1);
+		}
+		this.outputData(2);
+	}
 	//判断型号是否存在
 	private boolean isExistModel( String name ){
 		List<QueryParam> paramList = new ArrayList<QueryParam>();
