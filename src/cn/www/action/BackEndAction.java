@@ -2,7 +2,9 @@ package cn.www.action;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -513,14 +515,14 @@ public class BackEndAction  extends BaseAction{
 		listBrand = this.getCommonManager().findByCustomized( Brand.class, null, null);
 		List<QueryParam> paramList = new ArrayList<QueryParam>();
 		
-		if( model.getName()!=null && model.getName().trim().length()>0 ){
+		if( model!=null &&  model.getName()!=null && model.getName().trim().length()>0 ){
 			QueryParam param = new QueryParam();
 			param.setField("name");
 			param.setOp(OP.like);
 			param.setValue(new Object[]{ "%"+model.getName()+"%"});
 			paramList.add(param);
 		}
-		if( model.getBrand()!=null && model.getBrand().getId()!=0 ){
+		if( model!=null && model.getBrand()!=null && model.getBrand().getId()!=0 ){
 			QueryParam param2 = new QueryParam();
 			param2.setField("brand.id");
 			param2.setOp(OP.equal);
@@ -528,7 +530,7 @@ public class BackEndAction  extends BaseAction{
 			paramList.add(param2);
 		}
 		pager = this.getCommonManager().findPageByCustomized( pageNumber, pageSize, Model.class,paramList, null);
-		return "";
+		return "/model/listmodel";
 	}
 	
 	/**
@@ -538,12 +540,14 @@ public class BackEndAction  extends BaseAction{
 	@Action("editModel")
 	public String editModel(){
 		listBrand = this.getCommonManager().findByCustomized( Brand.class, null, null);
+		List<BrandMany> list = this.getCommonManager().findByCustomized( BrandMany.class, null, null);
+		this.getRequest().setAttribute("list", list);
 		if( id==0 ){
 			model = new Model();
 		}else{
 			model = this.getCommonManager().findEntityByPK( Model.class, id );
 		}
-		return "";
+		return "/model/model";
 	}
 	
 	/**

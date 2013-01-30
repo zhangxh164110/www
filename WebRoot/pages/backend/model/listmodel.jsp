@@ -12,7 +12,7 @@
 	<script type="text/javascript" src="${pageContext.request.contextPath}/js/common.js"></script>
     <script>
 		function addOrEdit( idVal ){
-			window.location.href = 'editBrand?id='+idVal;
+			window.location.href = 'editModel?id='+idVal;
 		}
 		function searchData(){
 			var url = 'lisetBrand';

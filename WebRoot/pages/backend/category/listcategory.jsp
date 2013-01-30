@@ -72,6 +72,7 @@
   			</s:iterator>
   		</table>
   		<input type="hidden" id="urlforward" value="listCategory" />
+  		<br/>
 		<div id="pagination" valign="middle" class="pagination" ></div>
   	</td>
   	<td background="${pageContext.request.contextPath}/pages/backend/images/mail_rightbg.gif">&nbsp;</td>

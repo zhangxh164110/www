@@ -11,6 +11,12 @@
     	
     	var id = '<s:property value="model.id"/>';
     	var oldName = '<s:property value="model.name"/>';
+    	var arr= new Array();
+    	$(function(){
+    		<s:iterator value="#request.list">	
+    				arr[arr.length]= new Array('<s:property value="brand.id"/>','<s:property value="category.name"/>');
+ 			 </s:iterator>
+    	})
     	function saveModel(){
     		if( checkName() && checkPwd() && checkEnterPwd() ){
     			$.ajax({
@@ -59,7 +65,14 @@
 			return true;
 	}
 	
-	
+	function getDetail( idVal ){
+		$("#detailId").empty();
+		var html = '==请选择==';
+		for(var i=0;i<arr.length;i++){
+			html +='<option value='+arr[i][0]+'>'+arr[i][1]+'</option>';
+		}
+		$("#detailId").html(html); 
+	}
 	
     </script>
   </head>
@@ -72,7 +85,7 @@
     <td valign="top" background="${pageContext.request.contextPath}/pages/backend/images/content-bg.gif">
 	    <table width="100%" height="31" border="0" cellpadding="0" cellspacing="0" class="left_topbg" id="table2">
 	      <tr>
-	        <td height="31"><div class="titlebt">编辑菜单</div></td>
+	        <td height="31"><div class="titlebt">编辑型号</div></td>
 	      </tr>
 	    </table>
     </td>
@@ -92,8 +105,18 @@
   				<td><s:textfield name="model.name" id="nickname"/><span id="reg_username_span"></span></td>
   			</tr>
   			<tr>
-  				<td style="text-align: right;">关联</td>
-  				<td></td><s:select list="listBrand" headerKey="==请选择==" headerValue="0" listKey="id" listValue="name" name="brand.id"></s:select>
+  				<td style="text-align: right;">品牌</td>
+  				<td>
+  				<s:select onchange="getDetail(this.value);" list="listBrand" id="typeId" headerKey="0" headerValue="==请选择==" listKey="id" listValue="name" name=""></s:select>
+  				</td>
+  			</tr>
+  			<tr>
+  				<td style="text-align: right;">分类</td>
+  				<td>
+	  				<select name="detailId" id="detailId">
+	                       <option  value="0" selected>==请选择==</option>
+	                   </select>
+                  </td>
   			</tr>
   			<tr>
   				<td colspan="3" style="text-align: center;">
