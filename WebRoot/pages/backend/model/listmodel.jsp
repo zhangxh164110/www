@@ -31,7 +31,7 @@
     <td valign="top" background="${pageContext.request.contextPath}/pages/backend/images/content-bg.gif">
 	    <table width="100%" height="31" border="0" cellpadding="0" cellspacing="0" class="left_topbg" id="table2">
 	      <tr>
-	        <td height="31"><div class="titlebt">菜单列表</div></td>
+	        <td height="31"><div class="titlebt">型号列表</div></td>
 	      </tr>
 	    </table>
     </td>
@@ -51,7 +51,8 @@
   		<table width="100%" cellpadding="0" cellspacing="0" border="0" class="gridView">
   			<tr>
 	  			<th>名称</th>
-	  			<th>关联</th>
+	  			<th>品牌</th>
+	  			<th>分类</th>
 	  			<th>操作</th>
   			</tr>
   			<s:iterator value="pager.elements">
@@ -60,18 +61,22 @@
   						<s:property value="name"/>
   					</td>
   					<td>
+  						<s:property value="brand.name"/>
+  					</td>
+  					<td>
   						<s:property value="category.name"/>
   						&nbsp;
   					</td>
   					<td>
   						<a href="javascript:addOrEdit('<s:property value="id"/>');">编辑</a>
-  						&nbsp;&nbsp;|&nbsp;&nbsp;
+  						&nbsp;|&nbsp;
   						<a href="javascript:delObj('delBrand','<s:property value="id"/>');">删除</a>
   					</td>
   				</tr>
   			</s:iterator>
   		</table>
   		<input type="hidden" id="urlforward" value="lisetBrand" />
+  		<br/>
 		<div id="pagination" valign="middle" class="pagination" ></div>
   	</td>
   	<td background="${pageContext.request.contextPath}/pages/backend/images/mail_rightbg.gif">&nbsp;</td>

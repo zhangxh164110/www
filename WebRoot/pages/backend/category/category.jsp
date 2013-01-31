@@ -91,6 +91,10 @@
   				<td><s:textfield name="category.name" id="nickname"/><span id="reg_username_span"></span></td>
   			</tr>
   			<tr>
+  				<td style="text-align: right;"><font color="red">*</font>使用范围</td>
+  				<td><s:radio list="#{1:'菜单',2:'分类',3:'菜单+分类'}" name="category.type" listKey="key" listValue="value"></s:radio></td>
+  			</tr>
+  			<tr>
   				<td style="text-align: right;">上级</td>
   				<td><s:select list="listCategory" headerKey="0" headerValue="==请选择==" listKey="id" listValue="name" name="category.parent.id"></s:select></td>
   			</tr>

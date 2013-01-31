@@ -10,6 +10,9 @@ body {
 	right: 0px;
 	bottom: 0px;
 }
+select{
+	width:152px;
+}
 .form_table{
 	background-color:#fff;
 	font-size: 12px;

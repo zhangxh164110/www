@@ -35,6 +35,10 @@ public class Product {
 	@JoinColumn(name = "userId")
 	private User user;// 录入人
 
+	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "categoryId")
+	private Category category;// 关联分类
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "brandId")
@@ -185,6 +189,16 @@ public class Product {
 
 	public void setUser(User user) {
 		this.user = user;
+	}
+
+
+	public Category getCategory() {
+		return category;
+	}
+
+
+	public void setCategory(Category category) {
+		this.category = category;
 	}
 
 	

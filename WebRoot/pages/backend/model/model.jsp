@@ -14,11 +14,12 @@
     	var arr= new Array();
     	$(function(){
     		<s:iterator value="#request.list">	
-    				arr[arr.length]= new Array('<s:property value="brand.id"/>','<s:property value="category.name"/>');
+    				arr[arr.length]= new Array('<s:property value="brand.id"/>','<s:property value="category.name"/>','<s:property value="category.id"/>');
  			 </s:iterator>
+ 			 initSelect();
     	})
     	function saveModel(){
-    		if( checkName() && checkPwd() && checkEnterPwd() ){
+    		if( checkName()){
     			$.ajax({
 				type:"POST",
 				url:"saveModel",
@@ -30,7 +31,7 @@
 					}else if(data == 2){
 						alert("系统繁忙，请稍后再试");
 					}else{
-					   var url = 'listUser';
+					   var url = 'listModel';
 					   window.location.href = url;
 					}
 				}
@@ -67,13 +68,21 @@
 	
 	function getDetail( idVal ){
 		$("#detailId").empty();
-		var html = '==请选择==';
+		var html = '<option  value="0" selected>==请选择==</option>';
 		for(var i=0;i<arr.length;i++){
-			html +='<option value='+arr[i][0]+'>'+arr[i][1]+'</option>';
+			if( idVal == arr[i][0] ){
+				html +='<option value='+arr[i][2]+'>'+arr[i][1]+'</option>';
+			}
 		}
 		$("#detailId").html(html); 
 	}
 	
+	function initSelect(){
+		var categoryId = '<s:property value="model.category.id"/>';
+		var brandId = '<s:property value="model.brand.id"/>';
+		getDetail(brandId);
+		$("#detailId").find("option[value="+categoryId+"]").attr("selected", "selected");
+	}
     </script>
   </head>
   <body>
@@ -107,13 +116,13 @@
   			<tr>
   				<td style="text-align: right;">品牌</td>
   				<td>
-  				<s:select onchange="getDetail(this.value);" list="listBrand" id="typeId" headerKey="0" headerValue="==请选择==" listKey="id" listValue="name" name=""></s:select>
+  					<s:select onchange="getDetail(this.value);" list="listBrand" id="typeId" headerKey="0" headerValue="==请选择==" listKey="id" listValue="name" name="model.brand.id"></s:select>
   				</td>
   			</tr>
   			<tr>
   				<td style="text-align: right;">分类</td>
   				<td>
-	  				<select name="detailId" id="detailId">
+	  				<select id="detailId" name="model.category.id">
 	                       <option  value="0" selected>==请选择==</option>
 	                   </select>
                   </td>

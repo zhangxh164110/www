@@ -140,7 +140,7 @@ H1 a {
 </head>
 
 <body>
-<table width="100%" height="280" border="0" cellpadding="0" cellspacing="0" bgcolor="#EEF2FB">
+<table width="100%" height="100%"  border="0" cellpadding="0" cellspacing="0" bgcolor="#EEF2FB">
   <tr>
     <td width="182" valign="top"><div id="container">
       <h1 class="type"><a href="javascript:void(0)">网站常规管理</a></h1>

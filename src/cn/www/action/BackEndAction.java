@@ -276,7 +276,7 @@ public class BackEndAction  extends BaseAction{
 	 */
 	@Action("editCategory")
 	public String editCategory(){
-		listCategory = this.getCommonManager().findByCustomized( Category.class, null, null);
+		listCategory = this.getCommonManager().findByCustomizedSQL( Category.class, "(parentId is null)");
 		this.getRequest().setAttribute( "listCategory", listCategory );
 		if( id==0 ){
 			category = new Category();
@@ -292,7 +292,9 @@ public class BackEndAction  extends BaseAction{
 	@Action("saveCategory")
 	public void saveCategory(){
 		try {
-			if( category.getParent().getId() == 0 ) category.setParent( null );
+			if( category.getParent().getId() == 0 ){
+				category.setParent( null );
+			}
 			if( category.getId() == 0 ){
 				if( isExistCategory(category.getName()) ){
 					this.outputData(1);
@@ -308,6 +310,7 @@ public class BackEndAction  extends BaseAction{
 				Category obj = this.getCommonManager().findEntityByPK( Category.class, category.getId());
 				obj.setParent( category.getParent() );
 				obj.setName( category.getName() );
+				obj.setType( category.getType());
 				this.getCommonManager().modifyEntity( obj );
 			}
 		} catch (Exception e) {
@@ -356,7 +359,7 @@ public class BackEndAction  extends BaseAction{
 	 */
 	@Action("listBrand")
 	public String listBrand(){
-		listCategory = this.getCommonManager().findByCustomized( Category.class, null, null);
+		listCategory = this.getCommonManager().findByCustomizedSQL( Category.class, "(type>1)");
 		List<QueryParam> paramList = new ArrayList<QueryParam>();
 		if(brand!=null &&  brand.getName()!=null && brand.getName().trim().length()>0 ){
 			QueryParam param = new QueryParam();
@@ -380,7 +383,7 @@ public class BackEndAction  extends BaseAction{
 	 */
 	@Action("editBrand")
 	public String editBrand(){
-		listCategory = this.getCommonManager().findByCustomized( Category.class, null, null);
+		this.getCommonManager().findByCustomizedSQL( Category.class, "(type>1)");
 		if( id==0 ){
 			brand = new Brand();
 		}else{
@@ -571,6 +574,7 @@ public class BackEndAction  extends BaseAction{
 				Model obj = this.getCommonManager().findEntityByPK( Model.class, model.getId());
 				obj.setBrand( model.getBrand());
 				obj.setName( model.getName() );
+				obj.setCategory( model.getCategory() );
 				this.getCommonManager().modifyEntity( obj );
 			}
 		} catch (Exception e) {
@@ -630,24 +634,25 @@ public class BackEndAction  extends BaseAction{
 	 */
 	@Action("listProduct")
 	public String listProduct(){
+		listBrand = this.getCommonManager().findByCustomized( Brand.class, null, null );
 		String startTime = this.getRequest().getParameter("startTime");
 		String endTime = this.getRequest().getParameter("endTime");
 		List<QueryParam> paramList = new ArrayList<QueryParam>();
-		if( product.getBrand()!=null && product.getBrand().getId()!=0 ){
+		if( product!=null && product.getBrand()!=null && product.getBrand().getId()!=0 ){
 			QueryParam param = new QueryParam();
 			param.setField("brand.id");
 			param.setOp(OP.equal);
 			param.setValue(new Object[]{product.getBrand().getId()});
 			paramList.add(param);	
 		}
-		if( product.getModel()!=null && product.getModel().getId()!=0 ){
+		if(  product!=null && product.getModel()!=null && product.getModel().getId()!=0 ){
 			QueryParam param2 = new QueryParam();
 			param2.setField("model.id");
 			param2.setOp(OP.equal);
 			param2.setValue(new Object[]{product.getModel().getId()});
 			paramList.add(param2);	
 		}
-		if( product.getStatus()!=null && product.getStatus()!=0 ){
+		if(  product!=null && product.getStatus()!=null && product.getStatus()!=0 ){
 			QueryParam param3 = new QueryParam();
 			param3.setField("status");
 			param3.setOp(OP.equal);
@@ -669,7 +674,7 @@ public class BackEndAction  extends BaseAction{
 			paramList.add(param5);	
 		}
 		pager = this.getCommonManager().findPageByCustomized(pageNumber, pageSize, Product.class, paramList, null);
-		return "";
+		return "/product/listproduct";
 	}
 	
 	/**
@@ -677,6 +682,8 @@ public class BackEndAction  extends BaseAction{
 	 */
 	@Action("editProduct")
 	public String editProduct(){
+		List<BrandMany> list = this.getCommonManager().findByCustomized( BrandMany.class, null, null);
+		this.getRequest().setAttribute("list", list);
 		listBrand = this.getCommonManager().findByCustomized( Brand.class, null, null );
 		listModel = this.getCommonManager().findByCustomized( Model.class, null, null );
 		if( id == 0 ){
@@ -684,7 +691,7 @@ public class BackEndAction  extends BaseAction{
 		}else{
 			product = this.getCommonManager().findEntityByPK( Product.class, id );
 		}
-		return "";
+		return "/product/product";
 	}
 	/**
 	 * 保存商品

@@ -29,6 +29,10 @@ public class Model {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "brandId")
 	private Brand brand;// 关联品牌
+	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "categoryId")
+	private Category category;// 关联分类
 
 
 	public long getId() {
@@ -58,6 +62,16 @@ public class Model {
 
 	public void setBrand(Brand brand) {
 		this.brand = brand;
+	}
+
+
+	public Category getCategory() {
+		return category;
+	}
+
+
+	public void setCategory(Category category) {
+		this.category = category;
 	}
 	
 	

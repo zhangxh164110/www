@@ -58,7 +58,7 @@
 		initHtml+='</span>';
 		
 		initHtml+='<span style="float:right;font-family: SimSun; font-size: 12px;">每页';
-		initHtml+='<select class="inputfield0_4select" style="font-family: SimSun; font-size: 12px;" name="pageSize" id="pageSize" onchange="changePage(this.form,\''+urlPageCommon+'\')">';
+		initHtml+='<select style="font-family: SimSun; font-size: 12px;width:40px;" name="pageSize" id="pageSize" onchange="changePage(this.form,\''+urlPageCommon+'\')">';
 		if(pageSizeCommon ==5 ){initHtml+='<option value="5" selected>5</option>';}else{initHtml+='<option value="5">5</option>';}
 		if(pageSizeCommon ==10){initHtml+='<option value="10" selected>10</option>';}else{initHtml+='<option value="10">10</option>';}
 		if(pageSizeCommon ==15){initHtml+='<option value="15" selected>15</option>';}else{initHtml+='<option value="15">15</option>';}

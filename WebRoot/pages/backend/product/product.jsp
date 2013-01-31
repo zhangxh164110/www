@@ -8,7 +8,72 @@
     <link href="${pageContext.request.contextPath}/pages/backend/css/skin.css" rel="stylesheet" type="text/css" />
     <script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery.js"></script>
     <script>
-    	
+    	var arr= new Array();
+    	var arr2 = new Array();
+    	$(function(){
+    		<s:iterator value="#request.list">	
+    				arr[arr.length]= new Array('<s:property value="brand.id"/>','<s:property value="category.name"/>','<s:property value="category.id"/>');
+ 			 </s:iterator>
+ 			 <s:iterator value="listModel">	
+    				arr2[arr2.length]= new Array('<s:property value="id"/>','<s:property value="name"/>','<s:property value="category.id"/>','<s:property value="brand.id"/>');
+ 			 </s:iterator>
+ 			 var id='<s:property value="product.id"/>';
+ 			 if( id !=0 ){
+	 			 initSelect();
+	 			 initModelSelect();
+ 			 }
+    	})
+    	//联动分类
+    	function getDetail( idVal ){
+			$("#categoryId").empty();
+			var html = '<option  value="0" selected>==请选择==</option>';
+			for(var i=0;i<arr.length;i++){
+				if( idVal == arr[i][0] ){
+					html +='<option value='+arr[i][2]+'>'+arr[i][1]+'</option>';
+				}
+			}
+			$("#categoryId").html(html); 
+		}
+		
+		function initSelect(){
+			var categoryId = '<s:property value="product.category.id"/>';
+			var brandId = '<s:property value="product.brand.id"/>';
+			getDetail(brandId);
+			$("#categoryId").find("option[value="+categoryId+"]").attr("selected", "selected");
+		}
+		//联动型号,type1为品牌联动，type2为分类
+		function getModelDetail( idVal,type ){
+			$("#modelId").empty();
+			var html = '<option  value="0" selected>==请选择==</option>';
+			for(var i=0;i<arr2.length;i++){
+				if( type == 1 ){
+					if( idVal == arr2[i][3] ){
+						html +='<option value='+arr2[i][0]+'>'+arr2[i][1]+'</option>';
+					}
+				}else{
+					if( idVal == arr2[i][2] ){
+						html +='<option value='+arr2[i][0]+'>'+arr2[i][1]+'</option>';
+					}
+				}
+				
+			}
+			$("#modelId").html(html); 
+		}
+		
+		function initModelSelect(){
+			var categoryId = '<s:property value="product.category.id"/>';
+			var brandId = '<s:property value="product.brand.id"/>';
+			var modelId = '<s:property value="product.model.id"/>';
+			if( categoryId !=0 ){
+				getModelDetail(categoryId,2);
+			}else{
+				getModelDetail(brandId,1);
+			}
+			$("#modelId").find("option[value="+modelId+"]").attr("selected", "selected");
+		}
+	
+	
+	
     	var id = '<s:property value="product.id"/>';
     	var oldName = '<s:property value="product.name"/>';
     	function saveProduct(){
@@ -19,12 +84,10 @@
 				cache:false,
 				data:$("#editForm").serialize(),
 				success:function (data){
-					if(data == 1){
-						alert("用户名称已经存在");
-					}else if(data == 2){
+				    if(data == 2){
 						alert("系统繁忙，请稍后再试");
 					}else{
-					   var url = 'listUser';
+					   var url = 'listProduct';
 					   window.location.href = url;
 					}
 				}
@@ -34,7 +97,9 @@
     		}
     	}
     	
-	
+		function checkName() {
+			return true;
+		}
     </script>
   </head>
   <body>
@@ -46,7 +111,7 @@
     <td valign="top" background="${pageContext.request.contextPath}/pages/backend/images/content-bg.gif">
 	    <table width="100%" height="31" border="0" cellpadding="0" cellspacing="0" class="left_topbg" id="table2">
 	      <tr>
-	        <td height="31"><div class="titlebt">编辑菜单</div></td>
+	        <td height="31"><div class="titlebt">编辑商品</div></td>
 	      </tr>
 	    </table>
     </td>
@@ -63,13 +128,26 @@
   				<td style="text-align: right;"><font color="red">*</font>名称</td>
   				<td><s:textfield name="product.name" id="nickname"/></td>
   			</tr>
+  			
   			<tr>
   				<td style="text-align: right;">品牌</td>
-  				<td></td><s:select list="listBrand" headerKey="==请选择==" headerValue="0" listKey="id" listValue="name" name="brand.id"></s:select>
+  				<td><s:select onchange="getDetail(this.value);getModelDetail(this.value,1);" id="brandId" list="listBrand" headerKey="0" headerValue="==请选择==" listKey="id" listValue="name" name="product.brand.id"></s:select></td>
+  			</tr>
+  			<tr>
+  				<td style="text-align: right;">分类</td>
+  				<td>
+  					<select  onchange="getModelDetail(this.value,2);" id="categoryId" name="product.category.id">
+                       <option  value="0" selected>==请选择==</option>
+                    </select>
+  				</td>
   			</tr>
   			<tr>
   				<td style="text-align: right;">型号</td>
-  				<td></td><s:select list="listModel" headerKey="==请选择==" headerValue="0" listKey="id" listValue="name" name="model.id"></s:select>
+  				<td>
+  					<select id="modelId" name="product.model.id">
+                       <option  value="0" selected>==请选择==</option>
+                    </select>
+  				</td>
   			</tr>
   			<tr>
   				<td style="text-align: right;"><font color="red">*</font>单价</td>
@@ -78,6 +156,10 @@
   			<tr>
   				<td style="text-align: right;"><font color="red">*</font>折扣</td>
   				<td><s:textfield name="product.discount" id="discount"/></td>
+  			</tr>
+  			<tr>
+  				<td style="text-align: right;"><font color="red">*</font>总数</td>
+  				<td><s:textfield name="product.count" id="count"/></td>
   			</tr>
   			<tr>
   				<td colspan="3" style="text-align: center;">
