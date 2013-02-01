@@ -218,31 +218,6 @@ function reachBottom(top){
     }
 }
 
-var prefix = '';
-var namespace_arrys = ['pf', 'im', 'os', 'p','cts'];
- //当前URL是否存在struts命名空间
-function isIncludeNameSpace(field){
- 	for(var i=0; i<namespace_arrys.length; i++){
- 		if(field.indexOf('\/' + namespace_arrys[i] +  '\/') != -1){
- 			return true;
- 		}
- 	}
- 	return false;
-}
-
-$(function(){
-	//让IE6 a链接悬浮切换图片不闪动
-	if($.browser.msie && $.browser.version.indexOf("6") >= 0){
-		try {
-			document.execCommand("BackgroundImageCache", false, true);         
-		} catch(err) {}
-	}
-	
-	if(!isIncludeNameSpace(document.URL)){
-		prefix = 'cts/';
-	}
-});
-
 //点击div之外关闭div
 function clickOutsideClose(obj,remove,fn){
 	if(typeof obj == 'string'){
@@ -432,3 +407,12 @@ function delObj( url, idVal ){
 		}
 	})
 }  
+ //验证邮箱
+ function isEmail(str) {
+ 	var myreg = /^([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+\.[a-zA-Z]{2,3}$/;
+	if(!myreg.test(str)){
+		return true;
+	} else {
+		return false;
+    }
+  }

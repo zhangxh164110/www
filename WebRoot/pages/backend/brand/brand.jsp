@@ -20,7 +20,7 @@
 				data:$("#editForm").serialize(),
 				success:function (data){
 					if(data == 1){
-						alert("用户名称已经存在");
+						alert("名称已经存在");
 					}else if(data == 2){
 						alert("系统繁忙，请稍后再试");
 					}else{
@@ -91,7 +91,7 @@
   				<td><s:textfield name="brand.name" id="nickname"/><span id="reg_username_span"></span></td>
   			</tr>
   			<tr>
-  				<td style="text-align: right;">关联</td>
+  				<td style="text-align: right;">分类</td>
   				<td>
   					<s:checkboxlist list="listCategory" listKey="id" listValue="name" name="categorys" value="#request.list.{id}"></s:checkboxlist>
   				</td>

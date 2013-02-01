@@ -98,6 +98,34 @@
     	}
     	
 		function checkName() {
+			if( $.trim($('#nickname').val())==''){
+				alert('名称不能为空');
+				return false;
+			}
+			if( $.trim($('unitsPrice').val())=='' ){
+				alert('单价不能为空');
+				return false;
+			}
+			if( !isNaN($.trim($('unitsPrice').val()))){
+				alert('单价必须为数字');
+				return false;
+			}
+			if( $.trim($('discount').val())=='' ){
+				alert('折扣不能为空');
+				return false;
+			}
+			if( !isNaN($.trim($('discount').val()))){
+				alert('折扣必须为数字');
+				return false;
+			}
+			if( $.trim($('count').val())=='' ){
+				alert('总数不能为空');
+				return false;
+			}
+			if( !isNaN($.trim($('count').val()))){
+				alert('总数必须为数字');
+				return false;
+			}
 			return true;
 		}
     </script>
