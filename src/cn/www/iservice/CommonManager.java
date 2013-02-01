@@ -26,5 +26,8 @@ public interface CommonManager{
 	public <E>List<E> findByCustomizedSQL(Class<E> _clz, String sqlparams);
 
 	public <E>Page<E> findPageByCustomized(int _pageNum, int _pageSize, Class<E> _clz, List<QueryParam> _params, List<QueryOrder> _orders);
+	
+	//清空原来的和article 的Id相关的ArticleCategory数据
+	public void delArticleCategory(long id);
 
 }

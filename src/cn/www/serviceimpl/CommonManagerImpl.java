@@ -53,5 +53,9 @@ public class CommonManagerImpl implements CommonManager{
 	public <E>Page<E> findPageByCustomized(int _pageNum, int _pageSize, Class<E> _clz, List<QueryParam> _params, List<QueryOrder> _orders){
 		return commonDao.findPageByCustomized(_pageNum, _pageSize, _clz, _params, _orders);
 	}
+	//清空原来的和article 的Id相关的ArticleCategory数据
+	public void delArticleCategory(long id){
+		this.commonDao.delArticleCategory(id);
+	}
 
 }
